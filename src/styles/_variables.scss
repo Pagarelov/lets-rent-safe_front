@@ -1,0 +1,47 @@
+// src/styles/_variables.scss
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #f8f9fa;
+  --text-color: #212529;
+  --text-color-muted: #6c757d;
+  --background-color: #ffffff;
+  --error-color: #dc3545;
+  --header-bg: #e9ecef;
+  --border-color: #dee2e6;
+  --interactive-bg-hover: #e9ecef;
+}
+
+html[data-theme='dark'] {
+  --primary-color: #61DAFB;
+  --secondary-color: #282c34;
+  --text-color: #ffffff;
+  --text-color-muted: #adb5bd;
+  --background-color: #20232a;
+  --error-color: #ff6b6b;
+  --header-bg: #282c34;
+  --border-color: #495057;
+  --interactive-bg-hover: #3e444c;
+}
+
+// Цвета
+$primary-color: var(--primary-color);
+$secondary-color: var(--secondary-color);
+$text-color: var(--text-color);
+$text-color-muted: var(--text-color-muted);
+$background-color: var(--background-color);
+$error-color: var(--error-color);
+$header-bg: var(--header-bg);
+$border-color: var(--border-color);
+$interactive-bg-hover: var(--interactive-bg-hover);
+
+// Шрифты
+$font-family-main: 'Inter', sans-serif;
+$font-size-base: 16px;
+
+// Отступы
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+
+// Границы
+$border-radius: 8px;
