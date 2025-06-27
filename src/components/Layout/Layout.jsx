@@ -1,15 +1,16 @@
 // src/components/Layout/Layout.jsx
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import styles from './Layout.module.scss';
 
-const Layout = ({ children }) => {
+const Layout = () => {
     return (
         <React.Fragment>
             <Header />
             <main className={styles.mainContent}>
-                {children}
+                <Outlet />
             </main>
             <Footer />
         </React.Fragment>

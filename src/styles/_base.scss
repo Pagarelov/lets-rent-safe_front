@@ -14,7 +14,6 @@
 body {
   font-family: var.$font-family-main;
   font-size: var.$font-size-base;
-  background-color: var.$background-color;
   color: var.$text-color;
   line-height: 1.5;
   @include mix.theme-transition(background-color, color);
