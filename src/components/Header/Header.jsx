@@ -14,6 +14,8 @@ const Header = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const getNavLinkClass = ({ isActive }) => clsx(styles.navLink, isActive && styles.active);
+
     return (
         <header className={styles.header}>
             <div className={styles.logo}>
@@ -22,9 +24,10 @@ const Header = () => {
 
             <div className={styles.desktopNav}>
                 <nav>
-                    <NavLink to="/">Главная</NavLink>
-                    <NavLink to="/about">О нас</NavLink>
-                    <NavLink to="/contact">Контакты</NavLink>
+                    <NavLink to="/" className={getNavLinkClass}>Главная</NavLink>
+                    <NavLink to="/catalog" className={getNavLinkClass}>Каталог</NavLink>
+                    <NavLink to="/favorites" className={getNavLinkClass}>Избранное</NavLink>
+                    <NavLink to="/developers" className={getNavLinkClass}>Застройщикам</NavLink>
                 </nav>
                 <ThemeSwitcher />
             </div>
@@ -36,8 +39,9 @@ const Header = () => {
             <div className={clsx(styles.mobileNav, isMenuOpen && styles.open)}>
                 <nav>
                     <NavLink to="/" onClick={toggleMenu}>Главная</NavLink>
-                    <NavLink to="/about" onClick={toggleMenu}>О нас</NavLink>
-                    <NavLink to="/contact" onClick={toggleMenu}>Контакты</NavLink>
+                    <NavLink to="/catalog" onClick={toggleMenu}>Каталог</NavLink>
+                    <NavLink to="/favorites" onClick={toggleMenu}>Избранное</NavLink>
+                    <NavLink to="/developers" onClick={toggleMenu}>Застройщикам</NavLink>
                 </nav>
                 <div className={styles.mobileThemeSwitcher}>
                     <p>Тема:</p>

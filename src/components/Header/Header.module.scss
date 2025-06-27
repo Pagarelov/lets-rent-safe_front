@@ -34,27 +34,28 @@
     display: flex;
     gap: var.$spacing-md;
 
-    a {
+    .navLink {
       color: var.$text-color;
       padding: var.$spacing-sm;
       border-radius: math.div(var.$border-radius, 2);
       text-decoration: none;
       transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
       @include mix.theme-transition(color);
-      position: relative;
+      position: relative; // для ::after
 
       &:hover {
         background-color: var.$interactive-bg-hover;
         color: var.$primary-color;
       }
 
+      // Стили для активной ссылки (подчеркивание)
       &.active {
         color: var.$primary-color;
 
         &::after {
           content: '';
           position: absolute;
-          bottom: -4px;
+          bottom: -4px; // Расположение подчеркивания
           left: 10%;
           width: 80%;
           height: 2px;
@@ -97,7 +98,7 @@
     flex-direction: column;
     gap: 1.5rem;
 
-    a {
+    a { // Здесь можно оставить тег 'a', так как стили проще
       color: var.$text-color;
       text-decoration: none;
       font-size: 1.5rem;
