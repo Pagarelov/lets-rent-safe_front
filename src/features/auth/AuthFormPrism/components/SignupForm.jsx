@@ -1,8 +1,9 @@
 // src/features/auth/components/SignupForm.jsx
-import React from 'react'; // useRef больше не нужен
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from '../AuthFormPrism.module.scss';
 import clsx from 'clsx';
+import { createClient } from '../../../../api/endpoints/client';
 
 export const SignupForm = ({ onLogin }) => {
     const {
@@ -10,22 +11,31 @@ export const SignupForm = ({ onLogin }) => {
         handleSubmit,
         formState: { errors },
         watch,
-        setValue // <<< Получаем метод для изменения значений формы
+        setValue,
+        reset
     } = useForm({
         mode: 'onBlur',
-        // Устанавливаем значение по умолчанию для типа пользователя
-        defaultValues: {
-            userType: 'user'
-        }
+        defaultValues: { userType: 'user' }
     });
 
-    // Следим за текущим значением поля userType, чтобы обновлять UI
     const userType = watch('userType');
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(null);
 
-    const onSignupSubmit = (data) => {
-        // Теперь в data будет и userType!
-        console.log('Данные для регистрации:', data);
-        // Пример вывода: { userType: 'developer', firstName: '...', ...}
+    const onSignupSubmit = async (data) => {
+        setError(null);
+        setSuccess(false);
+        setLoading(true);
+        try {
+            await createClient(data);
+            setSuccess(true);
+            reset();
+        } catch (e) {
+            setError(e.message || 'Ошибка регистрации');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -81,8 +91,10 @@ export const SignupForm = ({ onLogin }) => {
                     {errors.phone && <span className={styles.error}>{errors.phone.message}</span>}
                 </div>
                 <div className={styles.fieldWrapper}>
-                    <input type="submit" value="Создать аккаунт" />
+                    <input type="submit" value={loading ? 'Создание...' : 'Создать аккаунт'} disabled={loading} />
                 </div>
+                {success && <div style={{ color: 'green', marginBottom: 10 }}>Аккаунт успешно создан!</div>}
+                {error && <div className={styles.error}>{error}</div>}
                 <div className={styles.formLinks}>
                     <span className={styles.singin} onClick={onLogin}>Уже есть аккаунт? Войти</span>
                 </div>

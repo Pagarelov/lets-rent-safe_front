@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
 import { NavLink } from 'react-router-dom';
+import logo from '../../assets/images/logo.png';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,8 +19,10 @@ const Header = () => {
 
     return (
         <header className={styles.header}>
-            <div className={styles.logo}>
-                <a href="/">Let’s Rent Safe</a>
+            <div className={styles.logoBlock}>
+                <img src={logo} alt="logo" className={styles.logoImg} />
+                <div className={styles.logoDivider} />
+                <span className={styles.logoText}>Let’s rent safe</span>
             </div>
 
             <div className={styles.desktopNav}>

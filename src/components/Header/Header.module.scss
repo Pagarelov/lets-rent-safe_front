@@ -11,7 +11,7 @@
   padding: 0 var.$spacing-lg;
   height: 70px;
   background-color: var.$header-bg;
-  border-bottom: 1px solid var.$border-color;
+  border-bottom: 2px solid var.$border-color;
   position: relative;
   z-index: 100;
   @include mix.theme-transition(background-color, border-color);
@@ -23,6 +23,33 @@
   color: var.$primary-color;
   text-decoration: none;
   @include mix.theme-transition(color);
+}
+
+.logoBlock {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logoImg {
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+.logoDivider {
+  width: 2px;
+  height: 36px;
+  background: var.$text-color;
+  margin: 0 12px;
+}
+
+.logoText {
+  font-size: 2rem;
+  font-weight: 400;
+  color: var.$text-color;
+  letter-spacing: 0.01em;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
 .desktopNav {
