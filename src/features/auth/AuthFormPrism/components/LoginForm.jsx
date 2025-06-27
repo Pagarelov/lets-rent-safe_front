@@ -3,7 +3,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import styles from '../AuthFormPrism.module.scss'; // Мы будем использовать те же стили
 
-export const LoginForm = ({ onForgotPassword, onSignup }) => {
+export const LoginForm = ({ onSignup }) => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: 'onBlur'
     });
@@ -21,25 +21,15 @@ export const LoginForm = ({ onForgotPassword, onSignup }) => {
                 <div className={styles.fieldWrapper}>
                     <input
                         type="text"
-                        placeholder="логин"
-                        {...register('loginUsername', { required: 'Логин не может быть пустым' })}
+                        placeholder="Номер"
+                        {...register('loginPhone', { required: 'Номер не может быть пустым' })}
                     />
-                    <label>логин</label>
-                    {errors.loginUsername && <span className={styles.error}>{errors.loginUsername.message}</span>}
-                </div>
-                <div className={styles.fieldWrapper}>
-                    <input
-                        type="password"
-                        placeholder="пароль"
-                        {...register('loginPassword', { required: 'Пароль не может быть пустым' })}
-                    />
-                    <label>пароль</label>
-                    {errors.loginPassword && <span className={styles.error}>{errors.loginPassword.message}</span>}
+                    <label>Номер телефона</label>
+                    {errors.loginPhone && <span className={styles.error}>{errors.loginPhone.message}</span>}
                 </div>
                 <div className={styles.fieldWrapper}>
                     <input type="submit" value="Войти" />
                 </div>
-                <span className={styles.psw} onClick={onForgotPassword}>Забыли пароль?</span>
                 <span className={styles.signup} onClick={onSignup}>Нет аккаунта? Регистрация</span>
             </form>
         </div>

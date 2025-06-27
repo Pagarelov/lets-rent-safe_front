@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styles from './AuthFormPrism.module.scss';
 import { LoginForm } from './components/LoginForm';
 import { SignupForm } from './components/SignupForm';
-import { ForgotPasswordForm } from './components/ForgotPasswordForm';
+//import { ForgotPasswordForm } from './components/ForgotPasswordForm';
 
 const AuthFormPrism = () => {
     const [activeFace, setActiveFace] = useState('login');
@@ -11,7 +11,7 @@ const AuthFormPrism = () => {
     const prismTransforms = {
         login: 'translateZ(-10rem) rotateY(0deg)',
         signup: 'translateZ(-10rem) rotateY(-90deg)',
-        forgotPassword: 'translateZ(-10rem) rotateY(-180deg)',
+        //forgotPassword: 'translateZ(-10rem) rotateY(-180deg)',
     };
 
     return (
@@ -19,7 +19,7 @@ const AuthFormPrism = () => {
             <ul className={styles.nav}>
                 <li onClick={() => setActiveFace('login')}>Вход</li>
                 <li onClick={() => setActiveFace('signup')}>Регистрация</li>
-                <li onClick={() => setActiveFace('forgotPassword')}>Смена пароля</li>
+                {/*<li onClick={() => setActiveFace('forgotPassword')}>Смена пароля</li>*/}
             </ul>
 
             <div className={styles.wrapper}>
@@ -41,9 +41,9 @@ const AuthFormPrism = () => {
                     </div>
 
                     {/* Грань 3: Смена пароля (Back) */}
-                    <div className={`${styles.face} ${styles.faceBack}`}>
+                    {/* <div className={`${styles.face} ${styles.faceBack}`}>
                         <ForgotPasswordForm />
-                    </div>
+                    </div>*/}
                 </div>
             </div>
         </div>
