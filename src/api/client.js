@@ -1,7 +1,7 @@
 import { authStorage } from './utils/auth-storage';
 import { Navigate } from 'react-router-dom';
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'https://new.psyuni.ru:5002/api';
 
 async function apiRequest(endpoint, { method = 'GET', body, headers = {}, ...options } = {}) {
   const accessToken = authStorage.getAccessToken();
@@ -17,7 +17,7 @@ async function apiRequest(endpoint, { method = 'GET', body, headers = {}, ...opt
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method,
       headers: fetchHeaders,
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
       ...options,
     });
     

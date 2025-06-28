@@ -1,80 +1,9 @@
 // src/pages/HomePage/HomePage.jsx
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './HomePage.module.scss';
 import rentBotImage from '../../assets/images/rentbot.png';
-
-// ВРЕМЕННЫЕ ДАННЫЕ ДЛЯ КАТАЛОГА
-const houses = [
-  {
-    id: 1,
-    images: [
-      'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-      'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-      'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-    ],
-    price: 2200000,
-    pricePerM2: 80000,
-    area: 50,
-    floor: 12,
-    floors: 14,
-    rooms: 2,
-    address: 'Краснодар, ул. Садовая',
-    date: '16 июня 16:20',
-    isFavorite: false,
-  },
-  {
-    id: 2,
-    images: [
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-    ],
-    price: 2200000,
-    pricePerM2: 80000,
-    area: 50,
-    floor: 12,
-    floors: 14,
-    rooms: 2,
-    address: 'Краснодар, ул. Садовая',
-    date: '16 июня 16:20',
-    isFavorite: true,
-  },
-  {
-    id: 3,
-    images: [
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-    ],
-    price: 2200000,
-    pricePerM2: 80000,
-    area: 50,
-    floor: 12,
-    floors: 14,
-    rooms: 2,
-    address: 'Краснодар, ул. Садовая',
-    date: '16 июня 16:20',
-    isFavorite: true,
-  },
-  {
-    id: 4,
-    images: [
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-        'https://www.mera-project.ru/upload/resize_cache/sprint.editor/daa/625_420_2/daa6ed3c1ba97ce257f873ecee8716e5.jpg',
-    ],
-    price: 2200000,
-    pricePerM2: 80000,
-    area: 50,
-    floor: 12,
-    floors: 14,
-    rooms: 2,
-    address: 'Краснодар, ул. Садовая',
-    date: '16 июня 16:20',
-    isFavorite: true,
-  },
-];
+import { getMyApartments } from '../../api/endpoints/apartment';
 
 const HouseImagesSlider = ({ images }) => {
   const [active, setActive] = useState(0);
@@ -162,10 +91,25 @@ const HouseImagesSlider = ({ images }) => {
 
 const HomePage = () => {
     const [search, setSearch] = useState('');
+    const [apartments, setApartments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Фильтрация домов по поиску
-    const filteredHouses = houses.filter(house =>
-      house.address.toLowerCase().includes(search.toLowerCase())
+    useEffect(() => {
+      setLoading(true);
+      getMyApartments()
+        .then(data => {
+          setApartments(Array.isArray(data) ? data : []);
+          setLoading(false);
+        })
+        .catch(e => {
+          setError('Ошибка загрузки квартир');
+          setLoading(false);
+        });
+    }, []);
+
+    const filteredApartments = apartments.filter(apartment =>
+      apartment.address?.toLowerCase().includes(search.toLowerCase())
     );
 
     const handleSearchChange = (e) => {
@@ -173,7 +117,7 @@ const HomePage = () => {
     };
     const handleSearchKeyDown = (e) => {
       if (e.key === 'Enter') {
-        console.log('Поиск:', search);
+        // Можно реализовать поиск по нажатию Enter
       }
     };
 
@@ -192,7 +136,7 @@ const HomePage = () => {
                         <input
                             className={styles.searchInput}
                             type="text"
-                            placeholder="Поиск во всех регионах"
+                            placeholder="Поиск по адресу"
                             value={search}
                             onChange={handleSearchChange}
                             onKeyDown={handleSearchKeyDown}
@@ -230,25 +174,31 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* КАТАЛОГ ДОМОВ */}
-            <div className={styles.catalog}>
-              {filteredHouses.map(house => (
-                <div className={styles.houseCard} key={house.id}>
-                  <HouseImagesSlider images={house.images} />
-                  <div className={styles.houseInfo}>
-                    <div className={styles.housePrice}>
-                      <span style={{fontWeight: 600, fontSize: '1.15rem'}}> {house.price.toLocaleString()} ₽</span>
-                      <span style={{color: '#4CAF50', marginLeft: 8, fontSize: '0.98rem'}}>▲ {house.pricePerM2.toLocaleString()} ₽/м²</span>
+            {/* КАТАЛОГ КВАРТИР */}
+            {loading ? (
+              <div>Загрузка...</div>
+            ) : error ? (
+              <div style={{color: 'red'}}>{error}</div>
+            ) : (
+              <div className={styles.catalog}>
+                {filteredApartments.map(apartment => (
+                  <div className={styles.houseCard} key={apartment.id}>
+                    <HouseImagesSlider images={apartment.images || []} />
+                    <div className={styles.houseInfo}>
+                      <div className={styles.housePrice}>
+                        <span style={{fontWeight: 600, fontSize: '1.15rem'}}> {apartment.price?.toLocaleString()} ₽</span>
+                        {/* Можно добавить цену за м2, если есть */}
+                      </div>
+                      <div className={styles.houseMeta}>
+                        {apartment.livingArea} м² &nbsp;|&nbsp; {apartment.floor} этаж из {apartment.totalFloors} &nbsp;|&nbsp; {apartment.roomsCount}-комнаты
+                      </div>
+                      <div className={styles.houseAddress}>{apartment.address}</div>
+                      {/* Можно добавить дату, если есть */}
                     </div>
-                    <div className={styles.houseMeta}>
-                      {house.area} м² &nbsp;|&nbsp; {house.floor} этаж из {house.floors} &nbsp;|&nbsp; {house.rooms}-комнаты
-                    </div>
-                    <div className={styles.houseAddress}>{house.address}</div>
-                    <div className={styles.houseDate}>{house.date}</div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
         </div>
     );
 };

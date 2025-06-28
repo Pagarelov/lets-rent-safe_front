@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from '../AuthFormPrism.module.scss';
-import { login } from '../../../../api/endpoints/auth';
+import { loginStart, loginConfirm } from '../../../../api/endpoints/auth';
 import AuthCallModal from '../../../../components/AuthCallModal';
+import { authStorage } from '../../../../api/utils/auth-storage';
 
 export const LoginForm = ({ onSignup }) => {
     const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
-        mode: 'onBlur'
+        mode: 'onBlur',
+        defaultValues: { loginUserType: 'user' }
     });
     const [modalOpen, setModalOpen] = useState(false);
     const [callPhone, setCallPhone] = useState('');
     const [isVerifying, setIsVerifying] = useState(false);
     const [error, setError] = useState(null);
+    const [checkId, setCheckId] = useState(null);
+    const [polling, setPolling] = useState(false);
+    const pollingRef = useRef();
 
     const phoneValue = watch('loginPhone');
+    const loginUserType = watch('loginUserType');
+    const phoneNumbers = phoneValue ? phoneValue.replace(/\D/g, '') : '';
 
     useEffect(() => {
         if (phoneValue) {
@@ -60,13 +67,48 @@ export const LoginForm = ({ onSignup }) => {
         return true;
     };
 
+    // Polling for login confirmation
+    useEffect(() => {
+        if (modalOpen && checkId && phoneNumbers) {
+            setPolling(true);
+            pollingRef.current = setInterval(async () => {
+                try {
+                    const resp = await loginConfirm({ phone: phoneNumbers, userType: loginUserType, checkId });
+                    if (resp && resp.accessToken && resp.refreshToken) {
+                        authStorage.setTokens(resp.accessToken, resp.refreshToken);
+                        clearInterval(pollingRef.current);
+                        setPolling(false);
+                        setModalOpen(false);
+                        window.location.href = '/';
+                    }
+                } catch (e) {
+                    // Можно обработать ошибку, но не показываем пользователю при polling
+                }
+            }, 2000);
+            return () => {
+                clearInterval(pollingRef.current);
+                setPolling(false);
+            };
+        }
+    }, [modalOpen, checkId, phoneNumbers, loginUserType]);
+
+    // Остановить polling при закрытии модалки
+    useEffect(() => {
+        if (!modalOpen && pollingRef.current) {
+            clearInterval(pollingRef.current);
+            setPolling(false);
+        }
+    }, [modalOpen]);
+
     const onLoginSubmit = async (data) => {
         setError(null);
         setIsVerifying(true);
+        setCheckId(null);
         try {
             const phoneNumbers = data.loginPhone.replace(/\D/g, '');
-            const response = await login({ phone: phoneNumbers });
+            const response = await loginStart({ phone: phoneNumbers, userType: data.loginUserType });
             setCallPhone(response.callPhone || phoneNumbers);
+            setCheckId(response.checkId);
             setModalOpen(true);
         } catch (e) {
             setError(e.message || 'Ошибка входа');
@@ -79,6 +121,7 @@ export const LoginForm = ({ onSignup }) => {
         <div className={styles.content}>
             <h2>Вход</h2>
             <form onSubmit={handleSubmit(onLoginSubmit)}>
+                <input type="hidden" {...register('loginUserType', { required: true })} value={loginUserType} />
                 <div className={styles.fieldWrapper}>
                     <input
                         type="text"

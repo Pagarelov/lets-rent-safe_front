@@ -1,26 +1,55 @@
 import apiRequest from '../client';
 
-export async function login({ phone }) {
-  // Мок-ответ: имитируем задержку и возвращаем номер для звонка
-  await new Promise(res => setTimeout(res, 1000));
-  return { callPhone: phone || '8 (499) 555-5555' };
+// Начать логин (отправка телефона)
+export async function loginStart(data) {
+  return apiRequest('/Auth/login/start', {
+    method: 'POST',
+    body: data,
+  });
 }
 
-export async function getAuthInfo() {
-  return apiRequest('/auth/info', {
+// Подтвердить логин (код/звонок)
+export async function loginConfirm(data) {
+  return apiRequest('/Auth/login/confirm', {
+    method: 'POST',
+    body: data,
+  });
+}
+
+// Начать регистрацию (отправка телефона)
+export async function registerStart(data) {
+  return apiRequest('/Auth/register/start', {
+    method: 'POST',
+    body: data,
+  });
+}
+
+// Подтвердить регистрацию
+export async function registerConfirm(data) {
+  return apiRequest('/Auth/register/confirm', {
+    method: 'POST',
+    body: data,
+  });
+}
+
+// Получить информацию о пользователе
+export async function getInfo() {
+  return apiRequest('/Auth/info', {
     method: 'GET',
   });
 }
 
-export async function logout() {
-  return apiRequest('/auth/logout', {
+// Обновить токен
+export async function refreshToken(data) {
+  return apiRequest('/Auth/refresh', {
     method: 'POST',
+    body: data,
   });
 }
 
-export async function refreshToken(refreshToken) {
-  return apiRequest('/auth/refresh', {
+// Отозвать сессию по tokenId
+export async function revokeSession(tokenId) {
+  return apiRequest(`/Auth/revoke-session/${tokenId}`, {
     method: 'POST',
-    body: { refreshToken },
   });
 } 

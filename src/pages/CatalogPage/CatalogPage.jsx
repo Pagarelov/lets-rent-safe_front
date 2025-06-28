@@ -1,41 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./CatalogPage.module.scss";
-import homeImg from "../../assets/images/home.jpg";
-
-const mockData = [
-  {
-    id: 1,
-    price: "2 900 000",
-    name: "ЖК “Родина”",
-    flats: 115,
-    isFavorite: false,
-    image: homeImg,
-  },
-  {
-    id: 2,
-    price: "2 900 000",
-    name: "ЖК “Родина”",
-    flats: 115,
-    isFavorite: false,
-    image: homeImg,
-  },
-  {
-    id: 3,
-    price: "2 900 000",
-    name: "ЖК “Родина”",
-    flats: 115,
-    isFavorite: false,
-    image: homeImg,
-  },
-  {
-    id: 4,
-    price: "2 900 000",
-    name: "ЖК “Родина”",
-    flats: 115,
-    isFavorite: false,
-    image: homeImg,
-  },
-];
+import { getClients } from '../../api/endpoints/client';
 
 const CatalogPage = () => {
   const [filters, setFilters] = useState({
@@ -45,6 +10,22 @@ const CatalogPage = () => {
     floorTo: "",
     year: "2025",
   });
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    getClients()
+      .then(data => {
+        setClients(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(e => {
+        setError('Ошибка загрузки каталога');
+        setLoading(false);
+      });
+  }, []);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -105,21 +86,24 @@ const CatalogPage = () => {
           </div>
         </div>
       </div>
-      <div className={styles.resultCount}>
-        Найдено 10 тыс. объявлений
-      </div>
-      <div className={styles.cardsGrid}>
-        {mockData.map((item) => (
-          <div key={item.id} className={styles.card}>
-            <img src={item.image} alt={item.name} className={styles.cardImage} />
-            <div className={styles.cardInfo}>
-              <div className={styles.price}>От {item.price} ₽</div>
-              <div className={styles.name}>{item.name}</div>
-              <div className={styles.flats}>{item.flats} квартир</div>
+      {loading ? (
+        <div>Загрузка...</div>
+      ) : error ? (
+        <div style={{color: 'red'}}>{error}</div>
+      ) : (
+        <div className={styles.cardsGrid}>
+          {clients.map((item) => (
+            <div key={item.id} className={styles.card}>
+              <img src={item.image || ''} alt={item.name || ''} className={styles.cardImage} />
+              <div className={styles.cardInfo}>
+                <div className={styles.price}>От {item.price} ₽</div>
+                <div className={styles.name}>{item.name}</div>
+                <div className={styles.flats}>{item.flats} квартир</div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
