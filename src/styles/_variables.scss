@@ -9,6 +9,16 @@
   --header-bg: #ffffff;
   --border-color: #dee2e6;
   --interactive-bg-hover: #e9ecef;
+
+  /* Catalog theme vars */
+  --catalog-bg-main: #fff;
+  --catalog-bg-filters: #97adc2;
+  --catalog-bg-card: #fff;
+  --catalog-text-main: #222;
+  --catalog-text-secondary: #888;
+  --catalog-input-bg: #fff;
+  --catalog-input-border: #e0e0e0;
+  --catalog-shadow: 0 2px 12px 0 #e0e0e0;
 }
 
 html[data-theme='dark'] {
@@ -21,6 +31,16 @@ html[data-theme='dark'] {
   --header-bg: #282c34;
   --border-color: #495057;
   --interactive-bg-hover: #3e444c;
+
+  /* Catalog theme vars */
+  --catalog-bg-main: #23272f;
+  --catalog-bg-filters: #2d333b;
+  --catalog-bg-card: #262b33;
+  --catalog-text-main: #f3f6fa;
+  --catalog-text-secondary: #b1b7c0;
+  --catalog-input-bg: #23272f;
+  --catalog-input-border: #444a56;
+  --catalog-shadow: 0 2px 16px 0 #15181c;
 }
 
 // Цвета

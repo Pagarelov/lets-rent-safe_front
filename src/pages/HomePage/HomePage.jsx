@@ -163,43 +163,49 @@ const HouseImagesSlider = ({ images }) => {
 const HomePage = () => {
     const [search, setSearch] = useState('');
 
+    // Фильтрация домов по поиску
+    const filteredHouses = houses.filter(house =>
+      house.address.toLowerCase().includes(search.toLowerCase())
+    );
+
     const handleSearchChange = (e) => {
       setSearch(e.target.value);
     };
     const handleSearchKeyDown = (e) => {
       if (e.key === 'Enter') {
-        // Здесь можно реализовать фильтрацию или переход
         console.log('Поиск:', search);
       }
     };
 
     return (
         <div className={styles.page}>
-            <div className={styles.searchPromoRow}>
-                <div className={styles.searchBar}>
-                    <span className={styles.searchIcon}>
-                        {/* Лупа SVG */}
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="9" cy="9" r="7" stroke="#888" strokeWidth="2" />
-                            <line x1="15.4142" y1="15" x2="19" y2="18.5858" stroke="#888" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                    </span>
-                    <input
-                        className={styles.searchInput}
-                        type="text"
-                        placeholder="Поиск во всех регионах"
-                        value={search}
-                        onChange={handleSearchChange}
-                        onKeyDown={handleSearchKeyDown}
-                    />
-                    <span className={styles.filterIcon}>
-                        {/* Иконка фильтра */}
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect y="5" width="24" height="2" rx="1" fill="#222" />
-                            <rect y="11" width="24" height="2" rx="1" fill="#222" />
-                            <rect y="17" width="24" height="2" rx="1" fill="#222" />
-                        </svg>
-                    </span>
+            <div className={styles.searchContainer}>
+                <div className={styles.searchPromoRow}>
+                    <div className={styles.searchBar}>
+                        <span className={styles.searchIcon}>
+                            {/* Лупа SVG */}
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="9" cy="9" r="7" stroke="#888" strokeWidth="2" />
+                                <line x1="15.4142" y1="15" x2="19" y2="18.5858" stroke="#888" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                        </span>
+                        <input
+                            className={styles.searchInput}
+                            type="text"
+                            placeholder="Поиск во всех регионах"
+                            value={search}
+                            onChange={handleSearchChange}
+                            onKeyDown={handleSearchKeyDown}
+                        />
+                        <span className={styles.filterIcon}>
+                            {/* Иконка фильтра */}
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect y="5" width="24" height="2" rx="1" fill="#222" />
+                                <rect y="11" width="24" height="2" rx="1" fill="#222" />
+                                <rect y="17" width="24" height="2" rx="1" fill="#222" />
+                            </svg>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div className={styles.promoButtonsRow}>
@@ -226,7 +232,7 @@ const HomePage = () => {
 
             {/* КАТАЛОГ ДОМОВ */}
             <div className={styles.catalog}>
-              {houses.map(house => (
+              {filteredHouses.map(house => (
                 <div className={styles.houseCard} key={house.id}>
                   <HouseImagesSlider images={house.images} />
                   <div className={styles.houseInfo}>
