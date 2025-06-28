@@ -36,11 +36,13 @@ h1 {
   padding: 18px 12px 12px 12px;
   margin-bottom: 24px;
   color: var(--catalog-text-main);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .filterRow {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   margin-bottom: 12px;
 }
 
