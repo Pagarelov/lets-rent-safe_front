@@ -165,3 +165,27 @@
     display: block;
   }
 }
+
+@media (max-width: 600px) {
+  .header {
+    padding: 0 8px;
+    height: 54px;
+    width: 100vw;
+    max-width: 100vw;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .logoImg {
+    height: 32px;
+  }
+  .logoDivider {
+    height: 24px;
+    margin: 0 6px;
+  }
+  .logoText {
+    font-size: 1.1rem;
+  }
+  .logoBlock {
+    gap: 8px;
+  }
+}
